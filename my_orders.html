@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="background: white; padding: 30px; border-radius: 12px;">
+    <h2>My Order History</h2>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Drug</th>
+                <th>Qty</th>
+                <th>Total</th>
+                <th>Date & Time</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td><strong>ORD-100{{ order.id }}</strong></td>
+                <td>{{ order.drug_name }}</td>
+                <td>{{ order.quantity }}</td>
+                <td>₹{{ order.total_price }}</td>
+                <td><small>{{ order.order_date.strftime('%Y-%m-%d %I:%M %p') }}</small></td>
+                <td><span class="badge">{{ order.status }}</span></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

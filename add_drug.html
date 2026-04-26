@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="auth-card" style="max-width: 600px;">
+    <h2>Add New Drug</h2>
+    <form method="POST" action="{{ url_for('add_drug') }}">
+        <input type="text" name="name" placeholder="Drug Name" required>
+        
+        <select name="category_id" required>
+            <option value="" disabled selected>Select Category</option>
+            {% for cat in categories %}
+                <option value="{{ cat.id }}">{{ cat.name }}</option>
+            {% endfor %}
+        </select>
+
+        <div class="form-row">
+            <input type="number" step="0.01" id="price" name="price" placeholder="Original Price (₹)" oninput="calculateFinal()" required>
+            <input type="number" step="0.01" id="discount" name="discount" placeholder="Discount %" value="0" oninput="calculateFinal()" required>
+        </div>
+        
+        <div class="form-row">
+            <input type="number" step="0.01" id="final_price" name="final_price" placeholder="Final Price (Auto-calculated)" readonly style="background: #ecf0f1; font-weight: bold;">
+            <input type="number" name="stock" placeholder="Available Stock Quantity" required>
+        </div>
+
+        <button type="submit" class="btn-primary">Save Drug</button>
+    </form>
+</div>
+
+<script>
+    // This script automatically calculates the final price when the user types
+    function calculateFinal() {
+        let price = parseFloat(document.getElementById('price').value) || 0;
+        let discount = parseFloat(document.getElementById('discount').value) || 0;
+        let final = price - (price * (discount / 100));
+        document.getElementById('final_price').value = final.toFixed(2);
+    }
+</script>
+{% endblock %}

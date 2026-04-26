@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 2px solid #ecf0f1; padding-bottom: 15px;">
+        <h2 style="margin: 0;">Drug Inventory</h2>
+        
+        <div style="display: flex; gap: 15px; align-items: center;">
+            <form method="GET" action="{{ url_for('view_drugs') }}" style="display: flex; gap: 10px; margin: 0; flex-direction: row;">
+                <select name="category_filter" style="margin: 0; padding: 8px;">
+                    <option value="">All Categories</option>
+                    {% for cat in categories %}
+                        <option value="{{ cat.id }}" {% if selected_category == cat.id|string %}selected{% endif %}>{{ cat.name }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn-secondary" style="padding: 8px 15px;">Filter</button>
+            </form>
+            <a href="{{ url_for('add_drug') }}" class="btn-primary" style="text-decoration: none; padding: 8px 15px;">+ Add Drug</a>
+        </div>
+    </div>
+    
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Drug Name</th>
+                <th>Category</th>
+                <th>Final Price</th>
+                <th>Current Stock</th>
+                <th>Last Updated</th>
+                <th>Update Stock</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for drug in drugs %}
+            <tr>
+                <td><strong>{{ drug.name }}</strong></td>
+                <td>{{ drug.category_name }}</td>
+                <td><strong>₹{{ drug.final_price }}</strong></td>
+                <td>
+                    <span class="stock-indicator {% if drug.stock < 20 %}stock-red{% elif drug.stock <= 50 %}stock-yellow{% else %}stock-green{% endif %}">
+                        {{ drug.stock }}
+                    </span>
+                </td>
+                <td style="font-size: 0.8rem; color: #7f8c8d;">
+                    {{ drug.last_updated.strftime('%d-%b %I:%M %p') if drug.last_updated else 'Never' }}
+                </td>
+                <td>
+                    <form method="POST" action="{{ url_for('update_stock') }}" style="display: flex; gap: 5px; margin: 0; flex-direction: row;">
+                        <input type="hidden" name="drug_id" value="{{ drug.id }}">
+                        <input type="number" name="stock" value="{{ drug.stock }}" min="0" style="width: 80px; padding: 5px; margin: 0;" required>
+                        <button type="submit" class="btn-secondary" style="padding: 5px 10px;">Save</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="6" style="text-align: center;">No drugs found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2>Drug Categories</h2>
+        {% if session['role'] == 'admin' %}
+            <a href="{{ url_for('add_category') }}" class="btn-primary" style="text-decoration: none; font-size: 0.9rem;">+ Add Category</a>
+        {% endif %}
+    </div>
+    
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Category Name</th>
+                <th>Description</th>
+                <th>Total Stock</th>
+                {% if session['role'] == 'admin' %}<th>Actions</th>{% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for cat in categories %}
+            <tr>
+                <td><strong>{{ cat.name }}</strong></td>
+                <td style="color: #666; font-size: 0.9rem;">{{ cat.description }}</td>
+                <td>
+                    <span class="stock-indicator {% if cat.total_stock < 20 %}stock-red{% elif cat.total_stock <= 50 %}stock-yellow{% else %}stock-green{% endif %}">
+                        {{ cat.total_stock }} units
+                    </span>
+                </td>
+                {% if session['role'] == 'admin' %}
+                <td>
+                    <a href="{{ url_for('delete_category', id=cat.id) }}" class="btn-danger" onclick="return confirm('Are you sure? This will delete all drugs in this category too!');">Delete</a>
+                </td>
+                {% endif %}
+            </tr>
+            {% else %}
+            <tr><td colspan="4" style="text-align: center;">No categories found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

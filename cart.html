@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+    <h2>Your Shopping Cart</h2>
+    
+    {% if session['cart'] %}
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for drug_id, item in session['cart'].items() %}
+                <tr>
+                    <td><strong>{{ item.name }}</strong></td>
+                    <td>₹{{ item.price }}</td>
+                    <td>{{ item.qty }}</td>
+                    <td><strong>₹{{ item.price * item.qty }}</strong></td>
+                </tr>
+                {% endfor %}
+                <tr style="background-color: #f8f9fa;">
+                    <td colspan="3" style="text-align: right;"><h3>Total:</h3></td>
+                    <td><h3 style="color: #27ae60;">₹{{ total }}</h3></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div style="display: flex; justify-content: flex-end; gap: 15px; margin-top: 20px;">
+            <a href="{{ url_for('clear_cart') }}" class="btn-danger">Clear Cart</a>
+            
+            <form method="POST" action="{{ url_for('checkout') }}" onsubmit="return confirm('Please confirm you want to place this order for ₹{{ total }}.');">
+                <button type="submit" class="btn-primary" style="background: #27ae60;">Place Order</button>
+            </form>
+        </div>
+    {% else %}
+        <p style="text-align: center; margin-top: 20px;">Your cart is empty. <a href="{{ url_for('shop') }}">Go back to shop.</a></p>
+    {% endif %}
+</div>
+{% endblock %}

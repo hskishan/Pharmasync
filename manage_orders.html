@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="background: white; padding: 30px; border-radius: 12px;">
+    <h2>Manage Customer Orders</h2>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Drug</th>
+                <th>Date & Time</th>
+                <th>Status</th>
+                <th>Update</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td><strong>ORD-100{{ order.id }}</strong></td>
+                <td>{{ order.customer_name }}</td>
+                <td>{{ order.drug_name }} (x{{ order.quantity }})</td>
+                <td><small>{{ order.order_date.strftime('%d-%b %I:%M %p') }}</small></td>
+                <td><strong>{{ order.status }}</strong></td>
+                <td>
+                    <form method="POST" action="{{ url_for('update_order_status') }}" style="display: flex; gap: 5px; flex-direction: row;">
+                        <input type="hidden" name="order_id" value="{{ order.id }}">
+                        <select name="status" style="padding: 5px; margin: 0;">
+                            <option value="Pending" {% if order.status == 'Pending' %}selected{% endif %}>Pending</option>
+                            <option value="Shipped" {% if order.status == 'Shipped' %}selected{% endif %}>Shipped</option>
+                            <option value="Delivered" {% if order.status == 'Delivered' %}selected{% endif %}>Delivered</option>
+                        </select>
+                        <button type="submit" class="btn-secondary" style="padding: 5px;">Save</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

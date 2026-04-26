@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="split-layout">
+    <div class="info-section">
+        <h1>Welcome to PharmaSync</h1>
+        <p>Your trusted partner in modern pharmacy management. PharmaSync streamlines inventory tracking, category management, and order processing to ensure you can provide the best care for your community. Register today to access your dashboard.</p>
+        <p>Already have an account? <br><br><a href="{{ url_for('login') }}" class="btn-secondary">Go to Login</a></p>
+    </div>
+
+    <div class="form-section">
+        <h2>Register an Account</h2>
+        <form method="POST" action="/">
+            <div class="form-group">
+                <label>Register As:</label>
+                <select name="role" required>
+                    <option value="customer">Customer</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <input type="text" name="name" placeholder="Full Name" required>
+                <input type="email" name="email" placeholder="Email Address" required>
+            </div>
+            <div class="form-row">
+                <input type="tel" name="phone" placeholder="Phone Number" required>
+                <select name="gender" required>
+                    <option value="" disabled selected>Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <input type="number" name="age" placeholder="Age" required>
+                <input type="text" name="pincode" placeholder="Pincode" required>
+            </div>
+            <input type="password" name="password" placeholder="Create Password" required>
+            <textarea name="address" placeholder="Full Address" rows="3" required></textarea>
+            
+            <button type="submit" class="btn-primary">Register</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

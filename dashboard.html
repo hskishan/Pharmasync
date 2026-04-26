@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="info-section" style="border-radius: 12px; text-align: center;">
+    <h1>Welcome to your Dashboard</h1>
+    <p>Select an action from the navigation bar above to manage PharmaSync.</p>
+    
+    {% if session['role'] == 'admin' %}
+        <div style="margin-top: 30px;">
+            <a href="{{ url_for('add_category') }}" class="btn-primary" style="text-decoration: none; margin-right: 15px;">+ Add New Drug Category</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
